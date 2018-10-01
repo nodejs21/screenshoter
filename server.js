@@ -12,10 +12,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'dist/electronApp')));
 // app.use(express.static(path.join(__dirname, 'src')));
-const corsOptions = {
-    origin: ['http://localhost:4200', 'http://localhost:3000']
-}
-app.use(cors(corsOptions));
+// const corsOptions = {
+//     origin: ['http://localhost:4200', 'http://localhost:3000']
+// }
+// app.use(cors(corsOptions));
+app.use(cors());
 
 app.get('/', (req, res) => {
     // res.json(req+"");
