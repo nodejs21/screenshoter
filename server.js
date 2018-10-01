@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-    res.sendFile(express.static(path.join(__dirname, 'dist/electronApp')));
+    res.sendFile(express.static(path.join(__dirname, './dist/electronApp')));
 });
 
 app.get('/test', (req, res) => {
