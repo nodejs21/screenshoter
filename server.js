@@ -21,7 +21,7 @@ app.use(cors());
 app.get('/', (req, res) => {
     // res.json(req+"");
     // console.log(__dirname+"dist/electronApp/index.html");
-    res.sendFile("./dist/electronApp/index.html");
+    res.sendFile("index.html", {root: __dirname});
 });
 
 app.get('/test', (req, res) => {
