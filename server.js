@@ -18,11 +18,14 @@ app.use(express.static(path.join(__dirname, 'dist/electronApp')));
 // app.use(cors(corsOptions));
 app.use(cors());
 
-app.get('/', (req, res) => {
-    // res.json(req+"");
-    // console.log(__dirname+"dist/electronApp/index.html");
-    res.sendFile("index.html", {root: __dirname});
-});
+// app.get('/', (req, res) => {
+//     // res.json(req+"");
+//     console.log("Here i am..");
+//     console.log(__dirname+"/dist/electronApp/index.html");
+//     // console.log(__dirname+"dist/electronApp/index.html");
+//     res.send("/dist/electronApp/index.html", {root: __dirname})
+//     // res.sendFile("/dist/electronApp/index.html", {root: __dirname});
+// });
 
 app.get('/test', (req, res) => {
     res.json("Server is up...");
