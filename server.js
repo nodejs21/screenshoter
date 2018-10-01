@@ -18,9 +18,7 @@ app.use(bodyParser.json());
 // app.use(cors(corsOptions));
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.sendFile(express.static(path.join(__dirname, './dist/electronApp')));
-});
+app.use('/', express.static(path.join(__dirname, './dist/electronApp/')));
 
 app.get('/test', (req, res) => {
     res.json("Server is up...");
