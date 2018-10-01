@@ -80,18 +80,14 @@ export class HomepageComponent implements OnInit {
         this.valid = true;
         this.roomName = this.person.roomName;
         this.canCapture = false;
-        this.session.setRoom(this.person.roomName);
-        
         this.roomService.addAudience(this.person)
         .then(result => {
           alert(`Room:'${this.person.roomName}' joined`);
-          // this.session.setRoom(this.person.roomName);
-          // this.session.setAudienceId(this.audienceId);
-          // console.log(this.session.getRoom());
           this.audienceId = result["id"];
           this.session.setAudienceId(this.audienceId);
           form.reset();
           this.isAudience = true;
+          this.session.setRoom(this.person.roomName);
           this.startListening(false);
         })
         .catch(err => {
