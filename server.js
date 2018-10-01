@@ -20,8 +20,8 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     // res.json(req+"");
-    // res.render('index');
-    res.sendFile("index.html");
+    // console.log(__dirname+"dist/electronApp/index.html");
+    res.sendFile(__dirname+"dist/electronApp/index.html");
 });
 
 app.get('/test', (req, res) => {
