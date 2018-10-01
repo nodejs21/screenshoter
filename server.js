@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'dist/electronApp')));
+// app.use();
 // app.use(express.static(path.join(__dirname, 'src')));
 // const corsOptions = {
 //     origin: ['http://localhost:4200', 'http://localhost:3000']
@@ -18,14 +18,9 @@ app.use(express.static(path.join(__dirname, 'dist/electronApp')));
 // app.use(cors(corsOptions));
 app.use(cors());
 
-// app.get('/', (req, res) => {
-//     // res.json(req+"");
-//     console.log("Here i am..");
-//     console.log(__dirname+"/dist/electronApp/index.html");
-//     // console.log(__dirname+"dist/electronApp/index.html");
-//     res.send("/dist/electronApp/index.html", {root: __dirname})
-//     // res.sendFile("/dist/electronApp/index.html", {root: __dirname});
-// });
+app.get('/', (req, res) => {
+    res.sendFile(express.static(path.join(__dirname, 'dist/electronApp')));
+});
 
 app.get('/test', (req, res) => {
     res.json("Server is up...");
