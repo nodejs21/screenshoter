@@ -21,7 +21,7 @@ app.use(cors());
 app.get('/', (req, res) => {
     // res.json(req+"");
     // res.render('index');
-    res.sendFile("index");
+    res.sendFile("index.html");
 });
 
 app.get('/test', (req, res) => {
