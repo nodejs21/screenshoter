@@ -352,10 +352,13 @@ var HomepageComponent = /** @class */ (function () {
                 alert("Room:'" + _this.person.roomName + "' joined");
                 _this.audienceId = result["id"];
                 _this.session.setAudienceId(_this.audienceId);
-                form.reset();
                 _this.isAudience = true;
+                console.log(_this.roomName);
+                console.log(_this.person.roomName);
                 _this.session.setRoom(_this.person.roomName);
+                console.log(_this.session.getRoom());
                 _this.startListening(false);
+                form.reset();
             })
                 .catch(function (err) {
                 console.log(err);
@@ -380,6 +383,7 @@ var HomepageComponent = /** @class */ (function () {
             var _this = this;
             var url, fullPath_1, a;
             return __generator(this, function (_a) {
+                console.log(uploaded);
                 if (uploaded.length == 0) {
                     this.isAudience = false;
                     this.leaveRoom(false);
@@ -505,6 +509,8 @@ var RoomsService = /** @class */ (function () {
     RoomsService.prototype.listenPresenter = function () {
         var _this = this;
         this.roomName = this.session.getRoom();
+        console.log(this.session.getRoom());
+        console.log(this.roomName);
         this.presenter = this.afs.collection('presenters', function (presenter) { return presenter.where("roomName", "==", _this.roomName); }).snapshotChanges();
         return this.presenter;
     };

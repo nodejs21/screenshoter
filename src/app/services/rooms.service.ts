@@ -22,6 +22,8 @@ export class RoomsService {
   
   listenPresenter() {
     this.roomName = this.session.getRoom();
+    console.log(this.session.getRoom());
+    console.log(this.roomName);
     this.presenter = this.afs.collection<Observable<Person[]>>('presenters', presenter => presenter.where("roomName", "==", this.roomName)).snapshotChanges();
     return this.presenter;
   }

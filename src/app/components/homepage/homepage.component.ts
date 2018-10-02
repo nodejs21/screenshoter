@@ -85,10 +85,13 @@ export class HomepageComponent implements OnInit {
           alert(`Room:'${this.person.roomName}' joined`);
           this.audienceId = result["id"];
           this.session.setAudienceId(this.audienceId);
-          form.reset();
           this.isAudience = true;
+          console.log(this.roomName);
+          console.log(this.person.roomName);
           this.session.setRoom(this.person.roomName);
+          console.log(this.session.getRoom());
           this.startListening(false);
+          form.reset();
         })
         .catch(err => {
           console.log(err);
@@ -106,6 +109,7 @@ export class HomepageComponent implements OnInit {
       // console.log("Here in listening..");
       this.preSub = this.roomService.listenPresenter()
       .subscribe(async uploaded => {
+        console.log(uploaded);
         if(uploaded.length == 0){
           this.isAudience = false;
           this.leaveRoom(false);
