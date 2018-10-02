@@ -307,6 +307,7 @@ var HomepageComponent = /** @class */ (function () {
         this.prevCount = 0;
         this.valid = false;
         this.canCapture = false;
+        this.once = false;
         this.person = {
             type: "Audience",
             roomName: null,
@@ -322,6 +323,7 @@ var HomepageComponent = /** @class */ (function () {
             // console.log(this.session.getRoom());
             this.audienceId = this.session.getAudienceId();
             this.roomName = this.session.getRoom();
+            this.preSub = this.session.getPreSub();
             this.isAudience = true;
             return;
         }
@@ -330,12 +332,6 @@ var HomepageComponent = /** @class */ (function () {
         // console.log(this.roomName);
         // console.log(this.session.getAudienceId());
         this.startListening(true);
-    };
-    HomepageComponent.prototype.ngOnDestroy = function () {
-        //Called once, before the instance is destroyed.
-        //Add 'implements OnDestroy' to the class.
-        // console.log("gonna destroy...");
-        this.leaveRoom();
     };
     HomepageComponent.prototype.submitForm = function (form) {
         var _this = this;
@@ -372,7 +368,12 @@ var HomepageComponent = /** @class */ (function () {
     };
     HomepageComponent.prototype.startListening = function (go) {
         var _this = this;
-        // console.log("Here in listening..");
+        console.log("Here in listening..");
+        var flag = true;
+        if (this.preSub == undefined) {
+            flag = false;
+        }
+        console.log(this.preSub);
         if (go) {
             return;
         }
@@ -381,9 +382,7 @@ var HomepageComponent = /** @class */ (function () {
         this.preSub = this.roomService.listenPresenter()
             .subscribe(function (uploaded) { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
-            var url, fullPath_1, a;
             return __generator(this, function (_a) {
-                console.log(uploaded);
                 if (uploaded.length == 0) {
                     this.isAudience = false;
                     this.leaveRoom(false);
@@ -395,30 +394,45 @@ var HomepageComponent = /** @class */ (function () {
                     if (this.iWant == false) {
                         return [2 /*return*/];
                     }
-                    url = void 0;
-                    url = uploaded["0"].payload.doc._document.data.internalValue.root.right.left.value.internalValue;
-                    fullPath_1 = uploaded["0"].payload.doc._document.data.internalValue.root.left.value.internalValue;
-                    console.log(url);
-                    // console.log(fullPath);
-                    // console.log(url.substr(0, 5));
-                    // console.log(url.substr(0, 5) == "https");
-                    // console.log(url.substr(0, 5) == "https");
-                    if (url.substr(0, 5) == "https") {
-                        a = document.createElement('a');
-                        a.href = url;
-                        a.type = "application/octet-stream";
-                        // a.type = "image/png";
-                        a.download = url;
-                        document.body.appendChild(a);
-                        a.click();
-                        // document.removeChild(a);
-                        this.canCapture = false;
-                        alert("Screenshot saved in downloads!");
-                        this.iWant = false;
+                    // if(flag == false) {
+                    //   return this.captureScreen();
+                    // }
+                    uploaded.map(function (action) {
+                        console.log(_this.preSub);
+                        // console.log(action.payload.doc.data());
+                        // console.log(action.payload.doc.get("screenshotUrl"));
+                        // console.log(action.payload.doc.id);
+                        var url, fullPath;
+                        url = action.payload.doc.get("screenshotUrl");
+                        fullPath = action.payload.doc.get("fullPath");
+                        if (url == undefined) {
+                            _this.canCapture = false;
+                            _this.iWant = false;
+                            return;
+                        }
+                        console.log(flag);
+                        if (flag) {
+                            var a = document.createElement('a');
+                            a.href = url;
+                            // a.type = "application/octet-stream";
+                            a.type = "image/png";
+                            a.download = url;
+                            document.body.appendChild(a);
+                            a.click();
+                            alert("Screenshot saved in downloads!");
+                            _this.canCapture = false;
+                            _this.iWant = false;
+                            _this.session.setPreSub(_this.preSub);
+                        }
+                        else {
+                            console.log("recalling...");
+                            flag = true;
+                            return _this.captureScreen();
+                        }
                         setTimeout(function () {
-                            _this.storage.ref(fullPath_1).delete();
-                        }, 20000);
-                    }
+                            _this.storage.ref(fullPath).delete();
+                        }, 15000);
+                    });
                 }
                 return [2 /*return*/];
             });
@@ -445,11 +459,21 @@ var HomepageComponent = /** @class */ (function () {
         });
     };
     HomepageComponent.prototype.captureScreen = function () {
+        var _this = this;
         console.log("Going to capture screen...");
-        this.startListening(false);
         this.iWant = true;
         this.canCapture = true;
-        this.roomService.updateAudience(this.audienceId);
+        this.roomService.updateAudience(this.audienceId)
+            .then(function (result) {
+            // this.preSub = undefined;
+            console.log(_this.preSub);
+            if (_this.preSub == undefined) {
+                _this.startListening(false);
+            }
+        })
+            .catch(function (err) {
+            console.log(err);
+        });
         // this._electronService.ipcRenderer.on('captureScreen')
     };
     HomepageComponent = __decorate([
@@ -509,8 +533,6 @@ var RoomsService = /** @class */ (function () {
     RoomsService.prototype.listenPresenter = function () {
         var _this = this;
         this.roomName = this.session.getRoom();
-        console.log(this.session.getRoom());
-        console.log(this.roomName);
         this.presenter = this.afs.collection('presenters', function (presenter) { return presenter.where("roomName", "==", _this.roomName); }).snapshotChanges();
         return this.presenter;
     };
@@ -641,6 +663,12 @@ var SessionService = /** @class */ (function () {
     };
     SessionService.prototype.setAudienceId = function (audienceId) {
         localStorage.setItem("audienceId", audienceId);
+    };
+    SessionService.prototype.setPreSub = function (preSub) {
+        this.preSub = preSub;
+    };
+    SessionService.prototype.getPreSub = function () {
+        return this.preSub;
     };
     SessionService.prototype.getRoom = function () {
         return localStorage.getItem("room");

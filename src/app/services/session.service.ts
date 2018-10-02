@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Subscriber, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
+  preSub: Subscription;
   constructor() { }
   
   setRoom(room) {
@@ -12,6 +14,14 @@ export class SessionService {
   
   setAudienceId(audienceId) {
     localStorage.setItem("audienceId", audienceId); 
+  }
+  
+  setPreSub(preSub) {
+    this.preSub = preSub;
+  }
+  
+  getPreSub() {
+    return this.preSub;
   }
   
   getRoom() {

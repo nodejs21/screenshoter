@@ -3,7 +3,7 @@ import { Person } from '../../models/person';
 import { RoomsService } from '../../services/rooms.service';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { FirebaseApp } from 'angularfire2';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, Subscriber } from 'rxjs';
 import { FsService } from 'ngx-fs';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { HttpClient } from '@angular/common/http';
@@ -28,6 +28,7 @@ export class HomepageComponent implements OnInit {
   prevCount  = 0;
   valid: boolean = false;
   canCapture: boolean = false;
+  once: boolean = false;
   
   constructor(
     public http: HttpClient,
@@ -54,6 +55,7 @@ export class HomepageComponent implements OnInit {
         // console.log(this.session.getRoom());
         this.audienceId = this.session.getAudienceId();
         this.roomName = this.session.getRoom();
+        this.preSub = this.session.getPreSub();
         this.isAudience = true;
         return;
       }
@@ -62,13 +64,6 @@ export class HomepageComponent implements OnInit {
       // console.log(this.roomName);
       // console.log(this.session.getAudienceId());
       this.startListening(true);
-    }
-    
-    ngOnDestroy(): void {
-      //Called once, before the instance is destroyed.
-      //Add 'implements OnDestroy' to the class.
-      // console.log("gonna destroy...");
-      this.leaveRoom();
     }
     
     submitForm(form) {
@@ -104,12 +99,16 @@ export class HomepageComponent implements OnInit {
     }
     
     startListening(go?) {
-      // console.log("Here in listening..");
+      console.log("Here in listening..");
+      var flag = true;
+      if(this.preSub == undefined) {
+        flag = false;
+      }
+      console.log(this.preSub);
       if(go) {return};
       // console.log("Here in listening..");
       this.preSub = this.roomService.listenPresenter()
       .subscribe(async uploaded => {
-        console.log(uploaded);
         if(uploaded.length == 0){
           this.isAudience = false;
           this.leaveRoom(false);
@@ -120,37 +119,44 @@ export class HomepageComponent implements OnInit {
           if(this.iWant == false) {
             return;
           }
-          // console.log(uploaded);
-          // console.log(uploaded[0]["payload"]["doc"]["id"]);
-          // console.log(uploaded.length);
-          let url, fullPath;
-          url = uploaded["0"].payload.doc._document.data.internalValue.root.right.left.value.internalValue;
-          fullPath = uploaded["0"].payload.doc._document.data.internalValue.root.left.value.internalValue;
-          console.log(url);
-          // console.log(fullPath);
-          // console.log(url.substr(0, 5));
-          // console.log(url.substr(0, 5) == "https");
-          // console.log(url.substr(0, 5) == "https");
-          if(url.substr(0, 5) == "https") {
-            // console.log(url);
-            // await this.http.post('http:localhost:3000/capture', {url});
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.type = "application/octet-stream";
-            // a.type = "image/png";
-            a.download = url;
-            document.body.appendChild(a);
-            a.click();
-            // document.removeChild(a);
-            
-            this.canCapture = false;
-            alert("Screenshot saved in downloads!");
-            this.iWant = false;
+          // if(flag == false) {
+          //   return this.captureScreen();
+          // }
+          uploaded.map((action) => {
+            console.log(this.preSub);
+            // console.log(action.payload.doc.data());
+            // console.log(action.payload.doc.get("screenshotUrl"));
+            // console.log(action.payload.doc.id);
+            let url, fullPath;
+            url = action.payload.doc.get("screenshotUrl");
+            fullPath = action.payload.doc.get("fullPath");
+            if(url == undefined) {
+              this.canCapture = false;
+              this.iWant = false;
+              return;
+            }
+            console.log(flag);
+            if(flag) {
+              const a = document.createElement('a');
+              a.href = url;
+              // a.type = "application/octet-stream";
+              a.type = "image/png";
+              a.download = url;
+              document.body.appendChild(a);
+              a.click();
+              alert("Screenshot saved in downloads!");
+              this.canCapture = false;
+              this.iWant = false;
+              this.session.setPreSub(this.preSub);              
+            } else {
+              console.log("recalling...");
+              flag = true;
+              return this.captureScreen();
+            }
             setTimeout(() => {
               this.storage.ref(fullPath).delete();
-            }, 20000);
-          }
+            }, 15000);
+          })
         }
       })
     }
@@ -177,10 +183,19 @@ export class HomepageComponent implements OnInit {
     
     captureScreen() {
       console.log("Going to capture screen...");
-      this.startListening(false);
       this.iWant = true;
       this.canCapture = true;
-      this.roomService.updateAudience(this.audienceId);
+      this.roomService.updateAudience(this.audienceId)
+      .then((result) => {
+        // this.preSub = undefined;
+        console.log(this.preSub);
+        if(this.preSub == undefined) {
+          this.startListening(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
       // this._electronService.ipcRenderer.on('captureScreen')
     }
   }

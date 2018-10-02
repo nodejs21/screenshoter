@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
 import { FirebaseApp } from 'angularfire2';
 import { Person } from '../models/person';
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ export class RoomsService {
   roomsCollection: AngularFirestoreCollection<Person>;
   presenters: Observable<Person[]>;
   presenterCollection: AngularFirestoreCollection<Person>;
-  presenter: Observable<Person[]>;
+  presenter: Observable<DocumentChangeAction<{}>[]>;
   audience: Observable<Person[]>;  
   
   roomName;
@@ -22,9 +22,7 @@ export class RoomsService {
   
   listenPresenter() {
     this.roomName = this.session.getRoom();
-    console.log(this.session.getRoom());
-    console.log(this.roomName);
-    this.presenter = this.afs.collection<Observable<Person[]>>('presenters', presenter => presenter.where("roomName", "==", this.roomName)).snapshotChanges();
+    this.presenter = this.afs.collection('presenters', presenter => presenter.where("roomName", "==", this.roomName)).snapshotChanges();
     return this.presenter;
   }
   
