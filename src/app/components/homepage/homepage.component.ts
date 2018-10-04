@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Person } from '../../models/person';
 import { RoomsService } from '../../services/rooms.service';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { FirebaseApp } from 'angularfire2';
-import { Observable, Subscription, Subscriber } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { FsService } from 'ngx-fs';
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { HttpClient } from '@angular/common/http';
 import { SessionService } from '../../services/session.service';
 
@@ -142,6 +142,14 @@ export class HomepageComponent implements OnInit {
               // a.type = "application/octet-stream";
               a.type = "image/png";
               a.download = url;
+              if(/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
+                console.log("Here i am...");
+                console.log(url);
+                console.log(navigator);
+                console.log(navigator.userAgent);
+                window.open("https://www.google.com/");
+                // return;
+              }
               document.body.appendChild(a);
               a.click();
               alert("Screenshot saved in downloads!");

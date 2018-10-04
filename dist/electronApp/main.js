@@ -218,7 +218,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container h-100 w-50\">\n  <div class=\"row h-100 justify-content-center align-items-center\">  \n    <div class=\"container\">\n      <form *ngIf=\"!isAudience\" class=\"form-group\" novalidate #roomForm=\"ngForm\" (ngSubmit)=\"submitForm(roomForm)\">\n        <!-- <div class=\"col-3\">\n          <div class=\"form-check\">\n            <input [(ngModel)]=\"person.type\" name=\"type\" #audience class=\"form-check-input\" type=\"radio\" value=\"Audience\" required>\n            <label class=\"form-check-label\">Audience</label>\n          </div>\n        </div> -->\n        <div class=\"form-check col-12 pt-2\">\n          <input [(ngModel)]=\"person.roomName\" name=\"roomName\" type=\"text\" class=\"form-control\" placeholder=\"Type room number\" autofocus required>\n        </div>\n        <div class=\"form-check pt-2 col-12\">\n          <input type=\"submit\" class=\"btn btn-block btn-outline-primary\" value=\"Join room\" [disabled]=\"valid\"/>\n        </div>\n      </form>\n      <div *ngIf=\"isAudience\" class=\"row col-12\">\n        <button class=\"btn btn-outline-success m-2\" type=\"button\" (click)=\"captureScreen()\" [disabled]=\"canCapture\">Capture screen</button>\n        <button class=\"btn btn-outline-warning m-2\" type=\"button\" (click)=\"leaveRoom(true)\" [disabled]=\"canCapture\">Leave room {{roomName}}</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container h-100 w-50\">\n  <div class=\"row h-100 align-items-center\">\n    <div class=\"container\">\n      <img class=\"img-fluid mx-auto d-block\" src=\"../../../assets/logo.jpg\" alt=\"Company name\">\n      <form *ngIf=\"!isAudience\" class=\"form-group\" novalidate #roomForm=\"ngForm\" (ngSubmit)=\"submitForm(roomForm)\">\n        <!-- <div class=\"col-3\">\n          <div class=\"form-check\">\n            <input [(ngModel)]=\"person.type\" name=\"type\" #audience class=\"form-check-input\" type=\"radio\" value=\"Audience\" required>\n            <label class=\"form-check-label\">Audience</label>\n          </div>\n        </div> -->\n        <div class=\"form-check col-12 pt-2\">\n          <input [(ngModel)]=\"person.roomName\" name=\"roomName\" type=\"text\" class=\"form-control\" placeholder=\"Type room number\" autofocus required>\n        </div>\n        <div class=\"form-check pt-2 col-12\">\n          <input type=\"submit\" class=\"btn btn-block btn-outline-primary\" value=\"Join room\" [disabled]=\"valid\"/>\n        </div>\n      </form>\n      <div *ngIf=\"isAudience\" class=\"row col-12 d-flex justify-content-center\">\n        <button class=\"btn btn-outline-success m-2\" type=\"button\" (click)=\"captureScreen()\" [disabled]=\"canCapture\">Capture screen</button>\n        <button class=\"btn btn-outline-warning m-2\" type=\"button\" (click)=\"leaveRoom(true)\" [disabled]=\"canCapture\">Leave room {{roomName}}</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -417,6 +417,14 @@ var HomepageComponent = /** @class */ (function () {
                             // a.type = "application/octet-stream";
                             a.type = "image/png";
                             a.download = url;
+                            if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
+                                console.log("Here i am...");
+                                console.log(url);
+                                console.log(navigator);
+                                console.log(navigator.userAgent);
+                                window.open("https://www.google.com/");
+                                // return;
+                            }
                             document.body.appendChild(a);
                             a.click();
                             alert("Screenshot saved in downloads!");
