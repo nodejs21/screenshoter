@@ -147,8 +147,7 @@ export class HomepageComponent implements OnInit {
                 console.log(url);
                 console.log(navigator);
                 console.log(navigator.userAgent);
-                window.open("https://www.google.com/");
-                // return;
+                a.target = "_blank";
               }
               document.body.appendChild(a);
               a.click();
