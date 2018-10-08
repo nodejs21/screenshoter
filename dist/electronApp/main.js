@@ -379,7 +379,6 @@ var HomepageComponent = /** @class */ (function () {
             return;
         }
         ;
-        // console.log("Here in listening..");
         this.preSub = this.roomService.listenPresenter()
             .subscribe(function (uploaded) { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
@@ -388,21 +387,13 @@ var HomepageComponent = /** @class */ (function () {
                     this.isAudience = false;
                     this.leaveRoom(false);
                     alert("Presenter has deleted the room!");
-                    // this.session.setRoom(undefined);
-                    // this.session.setAudienceId(undefined);
                 }
                 else {
                     if (this.iWant == false) {
                         return [2 /*return*/];
                     }
-                    // if(flag == false) {
-                    //   return this.captureScreen();
-                    // }
                     uploaded.map(function (action) {
                         console.log(_this.preSub);
-                        // console.log(action.payload.doc.data());
-                        // console.log(action.payload.doc.get("screenshotUrl"));
-                        // console.log(action.payload.doc.id);
                         var url, fullPath;
                         url = action.payload.doc.get("screenshotUrl");
                         fullPath = action.payload.doc.get("fullPath");
@@ -488,7 +479,6 @@ var HomepageComponent = /** @class */ (function () {
             .catch(function (err) {
             console.log(err);
         });
-        // this._electronService.ipcRenderer.on('captureScreen')
     };
     HomepageComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -719,12 +709,12 @@ __webpack_require__.r(__webpack_exports__);
 var environment = {
     production: false,
     firebase: {
-        apiKey: "AIzaSyCviUrp-fMwdd3BXthO9F5wlsr2fJzlj-4",
-        authDomain: "screenshot-ca76f.firebaseapp.com",
-        databaseURL: "https://screenshot-ca76f.firebaseio.com",
-        projectId: "screenshot-ca76f",
-        storageBucket: "screenshot-ca76f.appspot.com",
-        messagingSenderId: "585811144945"
+        apiKey: "AIzaSyCNHZi61TyB-auzzIl6gth1Ce61ivao7zo",
+        authDomain: "scast-fd0b6.firebaseapp.com",
+        databaseURL: "https://scast-fd0b6.firebaseio.com",
+        projectId: "scast-fd0b6",
+        storageBucket: "scast-fd0b6.appspot.com",
+        messagingSenderId: "93161886043"
     }
 };
 /*

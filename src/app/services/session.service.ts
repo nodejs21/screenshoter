@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +31,4 @@ export class SessionService {
   getAudienceId() {
     return localStorage.getItem("audienceId");
   }
-  
 }
