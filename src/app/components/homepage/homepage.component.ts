@@ -29,6 +29,7 @@ export class HomepageComponent implements OnInit {
   valid: boolean = false;
   canCapture: boolean = false;
   once: boolean = false;
+  roomMessage;
   
   constructor(
     public http: HttpClient,
@@ -91,7 +92,8 @@ export class HomepageComponent implements OnInit {
         .catch(err => {
           console.log(err);
           this.valid = false;
-          alert(`Room:'${this.person.roomName}' not found`);
+          this.roomMessage = `Room: '${this.person.roomName}' not found`;
+          // alert(`Room:'${this.person.roomName}' not found`);
         })
       } else {
         alert("Check the field!");

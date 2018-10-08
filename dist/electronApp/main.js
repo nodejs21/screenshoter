@@ -419,10 +419,10 @@ var HomepageComponent = /** @class */ (function () {
                             a.download = url;
                             var ios = false;
                             if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
-                                console.log("Here i am...");
-                                console.log(url);
-                                console.log(navigator);
-                                console.log(navigator.userAgent);
+                                // console.log("Here i am...");
+                                // console.log(url);
+                                // console.log(navigator);
+                                // console.log(navigator.userAgent);
                                 a.target = "_blank";
                                 ios = true;
                             }

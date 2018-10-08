@@ -2,6 +2,9 @@
   <div class="row h-100 align-items-center">
     <div class="container">
       <img class="img-fluid mx-auto d-block" src="../../../assets/logo.jpg" alt="Company name">
+      <div *ngIf="!valid" class="form-check pt-2 col-12">
+        <p>{{roomMessage}}</p>
+      </div>
       <form *ngIf="!isAudience" class="form-group" novalidate #roomForm="ngForm" (ngSubmit)="submitForm(roomForm)">
         <!-- <div class="col-3">
           <div class="form-check">
