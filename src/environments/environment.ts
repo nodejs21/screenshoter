@@ -12,6 +12,7 @@ export const environment = {
     storageBucket: "scast-fd0b6.appspot.com",
     messagingSenderId: "93161886043"
   }
+  
 };
 
 /*
