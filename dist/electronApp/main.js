@@ -462,6 +462,7 @@ var HomepageComponent = /** @class */ (function () {
             if (_this.preSub != undefined) {
                 _this.preSub.unsubscribe();
             }
+            _this.roomMessage = "";
             _this.isAudience = false;
             _this.canCapture = true;
             _this.session.setAudienceId(undefined);

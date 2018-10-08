@@ -185,6 +185,7 @@ export class HomepageComponent implements OnInit {
         if(this.preSub != undefined) {
           this.preSub.unsubscribe();
         }
+        this.roomMessage = "";
         this.isAudience = false;
         this.canCapture = true;
         this.session.setAudienceId(undefined);
