@@ -77,14 +77,14 @@ export class HomepageComponent implements OnInit {
         this.canCapture = false;
         this.roomService.addAudience(this.person)
         .then(result => {
-          alert(`Room:'${this.person.roomName}' joined`);
+          // alert(`Room:'${this.person.roomName}' joined`);
           this.audienceId = result["id"];
           this.session.setAudienceId(this.audienceId);
           this.isAudience = true;
-          console.log(this.roomName);
-          console.log(this.person.roomName);
+          // console.log(this.roomName);
+          // console.log(this.person.roomName);
           this.session.setRoom(this.person.roomName);
-          console.log(this.session.getRoom());
+          // console.log(this.session.getRoom());
           this.startListening(false);
           form.reset();
         })
@@ -142,16 +142,21 @@ export class HomepageComponent implements OnInit {
               // a.type = "application/octet-stream";
               a.type = "image/png";
               a.download = url;
+              var ios = false;
               if(/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
                 console.log("Here i am...");
                 console.log(url);
                 console.log(navigator);
                 console.log(navigator.userAgent);
                 a.target = "_blank";
+                ios = true;
               }
               document.body.appendChild(a);
               a.click();
-              alert("Screenshot saved in downloads!");
+              a.parentNode.removeChild(a);
+              if(!ios) {
+                alert("Screenshot saved in downloads!");
+              }
               this.canCapture = false;
               this.iWant = false;
               this.session.setPreSub(this.preSub);              
